@@ -15,6 +15,16 @@ from Messages.AppMessages import receive_messages
 from Livestream.StartLivestream import start_live_stream
 from SystemData.SystemData import send_system_data
 
+send_temp_data_event = threading.Event()
+temp_data_websocket_lock = threading.Lock()
+
+receive_messages_websocket_lock = threading.Lock()
+receive_messages_event = threading.Event()
+
+send_system_data_websocket_lock = threading.Lock()
+send_system_data_event = threading.Event()
+
+send_livestream_data_event = threading.Event()
 
 async def connect_to_server():
     config = configparser.ConfigParser()
@@ -23,17 +33,6 @@ async def connect_to_server():
 
     appData = get_app_data()
     print(appData.UserID, appData.DeviceID)
-
-    send_temp_data_event = threading.Event()
-    temp_data_websocket_lock = threading.Lock()
-
-    receive_messages_websocket_lock = threading.Lock()
-    receive_messages_event = threading.Event()
-
-    send_system_data_websocket_lock = threading.Lock()
-    send_system_data_event = threading.Event()
-
-    send_livestream_data_event = threading.Event()
 
     async def restart_callback():
         print("Restarting...")
@@ -46,7 +45,9 @@ async def connect_to_server():
     while True:
         try:
             async with websockets.connect(uri) as websocket:
-                messageContent = ConnectToServerMessageContent(appData.ApiKeyId[0], appData.ApiKeyValue, appData.DeviceID, appData.UserID, appData.StreamingChannelUrl)
+                messageContent = ConnectToServerMessageContent(appData.ApiKeyId[0], appData.ApiKeyValue,
+                                                               appData.DeviceID, appData.UserID,
+                                                               appData.StreamingChannelUrl)
                 message = get_connect_to_server_message(messageContent)
                 await websocket.send(json.dumps(message))
                 print("Connected to server...")
@@ -56,14 +57,13 @@ async def connect_to_server():
                 send_system_data_event.set()
                 send_livestream_data_event.set()
 
-                livestream_coroutine = asyncio.create_task(start_live_stream(send_livestream_data_event))
-                system_data_coroutine = asyncio.create_task(send_system_data(websocket, copy.deepcopy(appData), send_system_data_event, send_system_data_websocket_lock))
                 await send_temperature_sensor_data(websocket, copy.deepcopy(appData), send_temp_data_event,
-                                             temp_data_websocket_lock)
+                                                   temp_data_websocket_lock)
                 await receive_messages(websocket, copy.deepcopy(appData), receive_messages_event,
-                                 receive_messages_websocket_lock, restart_callback)
+                                       receive_messages_websocket_lock, restart_callback)
                 await start_live_stream(send_livestream_data_event)
-                await send_system_data(websocket, copy.deepcopy(appData), send_system_data_event, send_system_data_websocket_lock)
+                await send_system_data(websocket, copy.deepcopy(appData), send_system_data_event,
+                                       send_system_data_websocket_lock)
 
                 # await asyncio.gather(
                 #     send_temperature_sensor_data(websocket, copy.deepcopy(appData), send_temp_data_event,
