@@ -16,6 +16,16 @@ from Livestream.StartLivestream import start_live_stream
 from SystemData.SystemData import send_system_data
 
 
+restart_connection_event = asyncio.Event()
+
+
+async def restart_connection():
+    await restart_connection_event.wait()
+    await asyncio.sleep(1)
+    await connect_to_server()
+    restart_connection_event.clear()
+
+
 async def connect_to_server():
     config = configparser.ConfigParser()
     config.read("config.ini")
@@ -53,7 +63,7 @@ async def connect_to_server():
 
                 await asyncio.gather(
                     send_temperature_sensor_data(websocket, copy.deepcopy(appData), send_temp_data_event, temp_data_websocket_lock),
-                    receive_messages(websocket, copy.deepcopy(appData), receive_messages_event, receive_messages_websocket_lock),
+                    receive_messages(websocket, copy.deepcopy(appData), receive_messages_event, receive_messages_websocket_lock, restart_connection_event),
                     livestream_coroutine,
                     system_data_coroutine
                 )
