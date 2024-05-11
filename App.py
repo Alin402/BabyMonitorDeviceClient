@@ -73,7 +73,6 @@ async def connect_to_server():
                                      send_system_data_websocket_lock))
 
                 await asyncio.gather(
-                    send_temp_task,
                     receive_msgs_task,
                     livestream_coroutine,
                     system_data_coroutine
