@@ -1,7 +1,7 @@
 import json
 
 
-async def receive_messages(websocket, appData, event, lock, restart_callback, task1, task2, task3):
+async def receive_messages(websocket, appData, event, lock, restart_callback):
     with lock:
         print("receiving messages...")
         while event.is_set():
@@ -10,7 +10,7 @@ async def receive_messages(websocket, appData, event, lock, restart_callback, ta
                 jsonMessage = json.loads(message)
                 messageType = jsonMessage["MessageType"]
                 if messageType == 8:
-                    await restart_callback(task1, task2, task3)  # Call the restart callback function
+                    await restart_callback()  # Call the restart callback function
             except Exception as e:
                 print(e)
                 continue
