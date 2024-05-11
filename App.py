@@ -39,6 +39,10 @@ async def connect_to_server():
         # Place your restart logic here
         # For example, you can call connect_to_server() again
         print("Restarting...")
+        send_temp_data_event.clear()
+        receive_messages_event.clear()
+        send_system_data_event.clear()
+        send_livestream_data_event.clear()
         await connect_to_server()
 
     while True:
