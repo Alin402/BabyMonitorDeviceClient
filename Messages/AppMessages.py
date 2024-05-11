@@ -10,7 +10,10 @@ async def receive_messages(websocket, appData, event, lock):
             try:
                 message = await websocket.recv()
                 jsonMessage = json.loads(message)
-                print("Received message: ", jsonMessage["MessageType"])
+                messageType = jsonMessage["MessageType"]
+                if messageType is 8:
+                    print("Restarting...")
+
                 await asyncio.sleep(2)
             except Exception as e:
                 print(e)
