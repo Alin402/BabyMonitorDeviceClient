@@ -24,7 +24,7 @@ async def send_temperature_sensor_data(websocket, appData, event, lock):
 
         # start sending temperature data
         print("sending temperature data...")
-        while event.is_set():
+        while True:
             try:
                 print("sending temperature...")
                 temperatureC = dhtDevice.temperature
