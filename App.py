@@ -35,12 +35,11 @@ async def connect_to_server():
     appData = get_app_data()
     print(appData.UserID, appData.DeviceID)
 
-    async def restart_callback(task1, task2, task3, task4):
+    async def restart_callback(task1, task2, task3):
         print("Restarting...")
         task1.cancel()
         task2.cancel()
         task3.cancel()
-        task4.cancel()
         await connect_to_server()
 
     while True:
@@ -63,7 +62,7 @@ async def connect_to_server():
                                                  temp_data_websocket_lock))
                 receive_msgs_task = asyncio.create_task(
                     receive_messages(websocket, copy.deepcopy(appData), receive_messages_event,
-                                     receive_messages_websocket_lock, restart_callback, send_temp_task, receive_msgs_task, livestream_coroutine, system_data_coroutine))
+                                     receive_messages_websocket_lock, restart_callback, send_temp_task, livestream_coroutine, system_data_coroutine))
                 livestream_coroutine = asyncio.create_task(start_live_stream(send_livestream_data_event))
                 system_data_coroutine = asyncio.create_task(
                     send_system_data(websocket, copy.deepcopy(appData), send_system_data_event,
