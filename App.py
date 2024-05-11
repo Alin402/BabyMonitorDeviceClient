@@ -29,7 +29,7 @@ send_livestream_data_event = threading.Event()
 
 async def restart_callback(websocket):
     print("Restarting...")
-    await websocket.close()
+    # await websocket.close()
     await connect_to_server()
 
 
