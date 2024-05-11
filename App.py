@@ -25,6 +25,10 @@ async def restart_connection():
     await connect_to_server()
 
 
+async def trigger_restart():
+    restart_connection_event.set()
+
+
 async def connect_to_server():
     config = configparser.ConfigParser()
     config.read("config.ini")
@@ -62,7 +66,7 @@ async def connect_to_server():
 
                 await asyncio.gather(
                     send_temperature_sensor_data(websocket, copy.deepcopy(appData), send_temp_data_event, temp_data_websocket_lock),
-                    receive_messages(websocket, copy.deepcopy(appData), receive_messages_event, receive_messages_websocket_lock, restart_connection_event),
+                    receive_messages(websocket, copy.deepcopy(appData), receive_messages_event, receive_messages_websocket_lock, trigger_restart),
                     livestream_coroutine,
                     system_data_coroutine
                 )

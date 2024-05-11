@@ -3,7 +3,7 @@ import asyncio
 import json
 
 
-async def receive_messages(websocket, appData, event, lock, restart_event):
+async def receive_messages(websocket, appData, event, lock, restart_event, trigger_restart):
     with lock:
         print("receiving messages...")
         while event.is_set():
@@ -13,7 +13,7 @@ async def receive_messages(websocket, appData, event, lock, restart_event):
                 messageType = jsonMessage["MessageType"]
                 if messageType is 8:
                     print("Restarting...")
-                    restart_event.set()
+                    await asyncio.create_task(trigger_restart())
             except Exception as e:
                 print(e)
                 continue
