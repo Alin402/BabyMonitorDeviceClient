@@ -55,7 +55,7 @@ async def connect_to_server():
                     send_temperature_sensor_data(websocket, copy.deepcopy(appData), send_temp_data_event, temp_data_websocket_lock),
                     receive_messages(websocket, copy.deepcopy(appData), receive_messages_event, receive_messages_websocket_lock),
                     livestream_coroutine,
-                    system_data_coroutine,
+                    system_data_coroutine
                 )
         except Exception as e:
             print(e)
