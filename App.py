@@ -33,8 +33,9 @@ async def close_websocket(websocket):
 
 async def restart_callback(websocket):
     print("Restarting...")
-    await close_websocket(websocket)
-    await connect_to_server()
+    close_websocket_task = asyncio.create_task(close_websocket(websocket))
+    connect_server_task = asyncio.create_task(connect_to_server())
+    await asyncio.gather(close_websocket_task, connect_server_task)
 
 
 async def connect_to_server():
