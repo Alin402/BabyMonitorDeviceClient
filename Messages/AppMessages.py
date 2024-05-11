@@ -1,3 +1,4 @@
+import asyncio
 import json
 
 
@@ -11,7 +12,8 @@ async def receive_messages(websocket, appData, event, lock, restart_callback):
                 jsonMessage = json.loads(message)
                 messageType = jsonMessage["MessageType"]
                 if messageType == 8:
-                    await restart_callback(websocket)
+                    task = asyncio.create_task(restart_callback(websocket))
+                    await asyncio.gather(task)
             except Exception as e:
                 print("Exception in app messages: " + str(e))
                 continue
