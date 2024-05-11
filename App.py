@@ -35,10 +35,6 @@ async def connect_to_server():
     appData = get_app_data()
     print(appData.UserID, appData.DeviceID)
 
-    async def restart_callback():
-        print("Restarting...")
-        await connect_to_server()
-
     while True:
         try:
             async with websockets.connect(uri) as websocket:
@@ -48,6 +44,11 @@ async def connect_to_server():
                 message = get_connect_to_server_message(messageContent)
                 await websocket.send(json.dumps(message))
                 print("Connected to server...")
+
+                async def restart_callback():
+                    print("Restarting...")
+                    await websocket.close()
+                    await connect_to_server()
 
                 send_temp_data_event.set()
                 receive_messages_event.set()
