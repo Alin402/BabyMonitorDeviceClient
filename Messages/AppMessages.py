@@ -10,7 +10,7 @@ async def receive_messages(websocket, appData, event, lock, restart_callback):
                 jsonMessage = json.loads(message)
                 messageType = jsonMessage["MessageType"]
                 if messageType == 8:
-                    restart_callback()  # Call the restart callback function
+                    await restart_callback()  # Call the restart callback function
             except Exception as e:
                 print(e)
                 continue
