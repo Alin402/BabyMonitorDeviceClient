@@ -27,6 +27,12 @@ send_system_data_event = threading.Event()
 send_livestream_data_event = threading.Event()
 
 
+async def restart_callback(websocket):
+    print("Restarting...")
+    await websocket.close()
+    await connect_to_server()
+
+
 async def connect_to_server():
     config = configparser.ConfigParser()
     config.read("config.ini")
@@ -44,11 +50,6 @@ async def connect_to_server():
                 message = get_connect_to_server_message(messageContent)
                 await websocket.send(json.dumps(message))
                 print("Connected to server...")
-
-                async def restart_callback():
-                    print("Restarting...")
-                    await websocket.close()
-                    await connect_to_server()
 
                 send_temp_data_event.set()
                 receive_messages_event.set()
