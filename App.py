@@ -53,7 +53,7 @@ async def connect_to_server():
 
                 await asyncio.gather(
                     send_temperature_sensor_data(websocket, copy.deepcopy(appData), send_temp_data_event, temp_data_websocket_lock),
-                    receive_messages(websocket, copy.deepcopy(appData), receive_messages_event, receive_messages_websocket_lock, restart_connection),
+                    receive_messages(websocket, copy.deepcopy(appData), receive_messages_event, receive_messages_websocket_lock),
                     livestream_coroutine,
                     system_data_coroutine,
                 )
