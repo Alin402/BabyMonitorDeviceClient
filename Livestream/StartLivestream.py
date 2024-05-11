@@ -14,4 +14,4 @@ async def start_live_stream(event):
         await process.communicate()
 
     except Exception as e:
-        print("Exception:", e, type(e).__name__)
+        print("Exception in livestream: " + str(e))

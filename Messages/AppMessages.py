@@ -13,5 +13,5 @@ async def receive_messages(websocket, appData, event, lock, restart_callback):
                 if messageType == 8:
                     await restart_callback(websocket)
             except Exception as e:
-                print(e)
+                print("Exception in app messages: " + str(e))
                 continue

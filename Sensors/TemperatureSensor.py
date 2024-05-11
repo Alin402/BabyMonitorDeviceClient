@@ -17,8 +17,7 @@ async def send_temperature_sensor_data(websocket, appData, event, lock):
     try:
         dhtDevice = adafruit_dht.DHT11(board.D23)
     except RuntimeError as e:
-        print(e.args[0])
-        exit()
+        print("Exception in temperature sensor get device: " + str(e))
     with lock:
         userID = appData.UserID
 
@@ -46,6 +45,6 @@ async def send_temperature_sensor_data(websocket, appData, event, lock):
                     await websocket.send(json.dumps(message))
                 await asyncio.sleep(1)
             except Exception as e:
-                print(e.args[0])
+                print("Exception in temperature sensor: " + str(e))
                 await asyncio.sleep(1)
                 continue

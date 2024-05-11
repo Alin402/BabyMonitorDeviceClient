@@ -78,7 +78,7 @@ async def connect_to_server():
                     system_data_coroutine
                 )
         except Exception as e:
-            print(e)
+            print("Exception in connect to server: " + str(e))
             continue
         finally:
             print("Closing connection...")

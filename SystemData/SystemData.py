@@ -25,6 +25,6 @@ async def send_system_data(websocket, appData, event, lock):
                         await websocket.send(json.dumps(message))
                 await asyncio.sleep(2)
             except Exception as e:
-                print("Failed to send system data:", e)
+                print("Exception in system temperature: " + str(e))
                 await asyncio.sleep(2)
                 continue
