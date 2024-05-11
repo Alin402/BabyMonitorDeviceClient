@@ -68,23 +68,4 @@ async def connect_to_server():
             send_livestream_data_event.clear()
 
 
-async def check_restart():
-    while True:
-        await asyncio.sleep(4)
-        await restart_connection()
-
-
-async def restart_connection():
-    while True:
-        try:
-            await connect_to_server()
-        except Exception as e:
-            print("Restarting connection...")
-            print(e)
-            time.sleep(5)
-
-
-async def main():
-    await asyncio.gather(connect_to_server(), check_restart())
-
-asyncio.run(main())
+asyncio.run(connect_to_server())
