@@ -71,8 +71,8 @@ async def connect_to_server():
 
 async def check_restart():
     while True:
-        print("yes")
-        await asyncio.sleep(1)
+        await asyncio.sleep(4)
+        asyncio.run(restart_connection())
 
 
 async def restart_connection():
