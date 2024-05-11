@@ -36,6 +36,7 @@ async def connect_to_server():
     send_livestream_data_event = threading.Event()
 
     while True:
+        print("intra")
         try:
             async with websockets.connect(uri) as websocket:
                 messageContent = ConnectToServerMessageContent(appData.ApiKeyId[0], appData.ApiKeyValue, appData.DeviceID, appData.UserID, appData.StreamingChannelUrl)
