@@ -83,3 +83,4 @@ async def connect_to_server():
             send_livestream_data_event.clear()
 
 connect_task = asyncio.create_task(connect_to_server())
+asyncio.gather(connect_task)
