@@ -4,6 +4,8 @@ import asyncio
 
 async def receive_messages(websocket, appData, event, lock):
     with lock:
+        print("receiving messages...")
         while event.is_set():
-            print("receiving messages...")
+            message = await websocket.recv()
+            print("Received message: ", message)
             await asyncio.sleep(2)
