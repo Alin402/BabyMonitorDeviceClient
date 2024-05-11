@@ -78,4 +78,4 @@ async def restart_connection():
             time.sleep(5)
 
 
-asyncio.create_task(restart_connection())
+asyncio.run(restart_connection())
