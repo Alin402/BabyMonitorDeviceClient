@@ -23,7 +23,6 @@ async def restart_connection():
     await restart_connection_event.wait()
     await asyncio.sleep(1)
     await connect_to_server()
-    restart_connection_event.clear()
 
 
 async def connect_to_server():
