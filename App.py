@@ -31,6 +31,7 @@ async def restart_callback(websocket):
     print("Restarting...")
     if websocket.open:
         await websocket.close()
+        await asyncio.sleep(2)
     await connect_to_server()
 
 
