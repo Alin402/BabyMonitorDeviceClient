@@ -27,6 +27,11 @@ send_system_data_event = threading.Event()
 send_livestream_data_event = threading.Event()
 
 
+async def restart_callback():
+    print("Restarting...")
+    await connect_to_server()
+
+
 async def connect_to_server():
     config = configparser.ConfigParser()
     config.read("config.ini")
@@ -34,10 +39,6 @@ async def connect_to_server():
 
     appData = get_app_data()
     print(appData.UserID, appData.DeviceID)
-
-    async def restart_callback():
-        print("Restarting...")
-        await connect_to_server()
 
     while True:
         try:
