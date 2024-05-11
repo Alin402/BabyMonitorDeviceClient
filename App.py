@@ -81,3 +81,4 @@ async def connect_to_server():
             send_livestream_data_event.clear()
 
 asyncio.run(connect_to_server())
+asyncio.create_task(trigger_restart())
