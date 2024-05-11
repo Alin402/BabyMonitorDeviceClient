@@ -36,7 +36,6 @@ async def connect_to_server():
     send_livestream_data_event = threading.Event()
 
     while True:
-        print("intra")
         try:
             async with websockets.connect(uri) as websocket:
                 messageContent = ConnectToServerMessageContent(appData.ApiKeyId[0], appData.ApiKeyValue, appData.DeviceID, appData.UserID, appData.StreamingChannelUrl)
@@ -68,6 +67,11 @@ async def connect_to_server():
             send_system_data_event.clear()
             send_livestream_data_event.clear()
 
+async def check_restart():
+    while True:
+        print("yes")
+        await asyncio.sleep(1)
+
 
 async def restart_connection():
     while True:
@@ -79,3 +83,4 @@ async def restart_connection():
             time.sleep(5)
 
 asyncio.run(restart_connection())
+asyncio.run(check_restart())
