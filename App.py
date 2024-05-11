@@ -56,7 +56,6 @@ async def connect_to_server():
                     receive_messages(websocket, copy.deepcopy(appData), receive_messages_event, receive_messages_websocket_lock, restart_connection),
                     livestream_coroutine,
                     system_data_coroutine,
-                    check_restart()
                 )
         except Exception as e:
             print(e)
@@ -84,5 +83,8 @@ async def restart_connection():
             print(e)
             time.sleep(5)
 
-asyncio.run(restart_connection())
-asyncio.run(check_restart())
+
+async def main():
+    await asyncio.gather(connect_to_server(), check_restart())
+
+asyncio.run(main())
