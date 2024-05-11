@@ -49,6 +49,11 @@ async def connect_to_server():
                 await websocket.send(json.dumps(message))
                 print("Connected to server...")
 
+                send_temp_data_event.set()
+                receive_messages_event.set()
+                send_system_data_event.set()
+                send_livestream_data_event.set()
+
                 send_temp_task = asyncio.create_task(
                     send_temperature_sensor_data(websocket, copy.deepcopy(appData), send_temp_data_event,
                                                  temp_data_websocket_lock))
