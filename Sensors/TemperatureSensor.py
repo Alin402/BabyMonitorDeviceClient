@@ -30,7 +30,7 @@ async def send_temperature_sensor_data(websocket, appData, event, lock):
                 temperatureC = dhtDevice.temperature
                 if temperatureC is None:
                     return
-                temperatureC = random.uniform(20, 30);
+                temperatureC = random.uniform(20, 30)
                 temperatureF = temperatureC * (9 / 5) + 32
                 humidity = dhtDevice.humidity
 
