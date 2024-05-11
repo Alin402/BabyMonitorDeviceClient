@@ -16,19 +16,6 @@ from Livestream.StartLivestream import start_live_stream
 from SystemData.SystemData import send_system_data
 
 
-restart_connection_event = asyncio.Event()
-
-
-async def restart_connection():
-    await restart_connection_event.wait()
-    await asyncio.sleep(1)
-    await connect_to_server()
-
-
-async def trigger_restart():
-    restart_connection_event.set()
-
-
 async def connect_to_server():
     config = configparser.ConfigParser()
     config.read("config.ini")
@@ -47,6 +34,12 @@ async def connect_to_server():
     send_system_data_event = threading.Event()
 
     send_livestream_data_event = threading.Event()
+
+    async def restart_callback():
+        # Place your restart logic here
+        # For example, you can call connect_to_server() again
+        print("Restarting...")
+        await connect_to_server()
 
     while True:
         try:
@@ -68,7 +61,7 @@ async def connect_to_server():
                     send_temperature_sensor_data(websocket, copy.deepcopy(appData), send_temp_data_event,
                                                  temp_data_websocket_lock),
                     receive_messages(websocket, copy.deepcopy(appData), receive_messages_event,
-                                     receive_messages_websocket_lock, trigger_restart),
+                                     receive_messages_websocket_lock, restart_callback),
                     livestream_coroutine,
                     system_data_coroutine
                 )
@@ -82,5 +75,5 @@ async def connect_to_server():
             send_system_data_event.clear()
             send_livestream_data_event.clear()
 
-connect_task = asyncio.create_task(connect_to_server())
-asyncio.gather(connect_task)
+
+asyncio.run(connect_to_server())
