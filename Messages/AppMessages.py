@@ -13,7 +13,7 @@ async def receive_messages(websocket, appData, event, lock, trigger_restart):
                 messageType = jsonMessage["MessageType"]
                 if messageType is 8:
                     print("Restarting...")
-                    trigger_restart()
+                    await trigger_restart()
             except Exception as e:
                 print(e)
                 continue
