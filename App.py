@@ -56,15 +56,21 @@ async def connect_to_server():
 
                 livestream_coroutine = asyncio.create_task(start_live_stream(send_livestream_data_event))
                 system_data_coroutine = asyncio.create_task(send_system_data(websocket, copy.deepcopy(appData), send_system_data_event, send_system_data_websocket_lock))
+                await send_temperature_sensor_data(websocket, copy.deepcopy(appData), send_temp_data_event,
+                                             temp_data_websocket_lock)
+                await receive_messages(websocket, copy.deepcopy(appData), receive_messages_event,
+                                 receive_messages_websocket_lock, restart_callback)
+                await start_live_stream(send_livestream_data_event)
+                await send_system_data(websocket, copy.deepcopy(appData), send_system_data_event, send_system_data_websocket_lock)
 
-                await asyncio.gather(
-                    send_temperature_sensor_data(websocket, copy.deepcopy(appData), send_temp_data_event,
-                                                 temp_data_websocket_lock),
-                    receive_messages(websocket, copy.deepcopy(appData), receive_messages_event,
-                                     receive_messages_websocket_lock, restart_callback),
-                    livestream_coroutine,
-                    system_data_coroutine
-                )
+                # await asyncio.gather(
+                #     send_temperature_sensor_data(websocket, copy.deepcopy(appData), send_temp_data_event,
+                #                                  temp_data_websocket_lock),
+                #     receive_messages(websocket, copy.deepcopy(appData), receive_messages_event,
+                #                      receive_messages_websocket_lock, restart_callback),
+                #     livestream_coroutine,
+                #     system_data_coroutine
+                # )
         except Exception as e:
             print(e)
             continue
