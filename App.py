@@ -36,8 +36,6 @@ async def connect_to_server():
     send_livestream_data_event = threading.Event()
 
     async def restart_callback():
-        # Place your restart logic here
-        # For example, you can call connect_to_server() again
         print("Restarting...")
         send_temp_data_event.clear()
         receive_messages_event.clear()

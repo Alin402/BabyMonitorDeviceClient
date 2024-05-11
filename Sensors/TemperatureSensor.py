@@ -19,12 +19,12 @@ async def send_temperature_sensor_data(websocket, appData, event, lock):
     except RuntimeError as e:
         print(e.args[0])
         exit()
-    with lock:
+    with (lock):
         userID = appData.UserID
 
         # start sending temperature data
         print("sending temperature data...")
-        while event.is_set():
+        while True:
             try:
                 print("sending temperature...")
                 temperatureC = dhtDevice.temperature
