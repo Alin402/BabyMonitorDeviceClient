@@ -65,9 +65,9 @@ async def connect_to_server():
                 system_data_coroutine = asyncio.create_task(send_system_data(websocket, copy.deepcopy(appData), send_system_data_event, send_system_data_websocket_lock))
                 await send_temperature_sensor_data(websocket, copy.deepcopy(appData), send_temp_data_event,
                                                    temp_data_websocket_lock)
+                await receive_messages(websocket, copy.deepcopy(appData), receive_messages_event, receive_messages_websocket_lock, trigger_restart)
 
                 await asyncio.gather(
-                    receive_messages(websocket, copy.deepcopy(appData), receive_messages_event, receive_messages_websocket_lock, trigger_restart),
                     livestream_coroutine,
                     system_data_coroutine
                 )
