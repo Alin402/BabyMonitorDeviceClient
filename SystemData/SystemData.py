@@ -19,7 +19,7 @@ async def send_system_data(websocket, appData, event, lock):
                     temperature_str = file.readline()
                     temperature = float(temperature_str) / 1000.0
                     print("sending system temperature..." + str(temperature))
-                    messageContent = SendSystemDataContent(userID, temperature)
+                    messageContent = SendSystemDataContent(userID, temperature, "adrianb_1")
                     message = get_send_system_data_message(messageContent)
                     if websocket.open:
                         await websocket.send(json.dumps(message))
