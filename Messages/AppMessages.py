@@ -1,6 +1,7 @@
 import asyncio
 import json
 from LifetimeOperations.RestartDevice import restart_device
+from Wifi.ConnectToWifi import connect_to_wifi
 
 
 async def receive_messages(websocket, appData, event, lock):
@@ -16,7 +17,8 @@ async def receive_messages(websocket, appData, event, lock):
                     task = asyncio.create_task(restart_device())
                     await asyncio.gather(task)
                 elif messageType == 9:
-                    print(jsonMessage["Content"])
+                    print(jsonMessage["Content"]['WifiName'])
+                    print(jsonMessage["Content"]['WifiPassword'])
             except Exception as e:
                 print("Exception in app messages: " + str(e))
                 continue
