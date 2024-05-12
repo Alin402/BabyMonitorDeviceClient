@@ -1,7 +1,7 @@
 import os
 
 
-def configure_wifi(ssid, password):
+def connect_to_wifi(ssid, password):
     config_lines = [
         'ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev',
         'update_config=1',
