@@ -26,17 +26,6 @@ send_system_data_event = threading.Event()
 
 send_livestream_data_event = threading.Event()
 
-async def close_websocket(websocket):
-    if websocket.open:
-        await websocket.close()
-        print("Websocket connection closed")
-
-async def restart_callback(websocket):
-    print("Restarting...")
-    close_websocket_task = asyncio.create_task(close_websocket(websocket))
-    connect_server_task = asyncio.create_task(connect_to_server())
-    await asyncio.gather(close_websocket_task, connect_server_task)
-
 
 async def connect_to_server():
     config = configparser.ConfigParser()
@@ -66,7 +55,7 @@ async def connect_to_server():
                                                  temp_data_websocket_lock))
                 receive_msgs_task = asyncio.create_task(
                     receive_messages(websocket, copy.deepcopy(appData), receive_messages_event,
-                                     receive_messages_websocket_lock, restart_callback))
+                                     receive_messages_websocket_lock))
                 livestream_coroutine = asyncio.create_task(start_live_stream(send_livestream_data_event))
                 system_data_coroutine = asyncio.create_task(
                     send_system_data(websocket, copy.deepcopy(appData), send_system_data_event,
