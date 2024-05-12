@@ -15,6 +15,8 @@ async def receive_messages(websocket, appData, event, lock):
                 if messageType == 8:
                     task = asyncio.create_task(restart_device())
                     await asyncio.gather(task)
+                elif messageType == 9:
+                    print(jsonMessage["Content"])
             except Exception as e:
                 print("Exception in app messages: " + str(e))
                 continue
