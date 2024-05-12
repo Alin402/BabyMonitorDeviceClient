@@ -1,28 +1,26 @@
-import time
-import pywifi
-from pywifi import const
+import os
 
 
-def connect_to_wifi(ssid, password):
-    wifi = pywifi.PyWiFi()
-    iface = wifi.interfaces()[0]  # Assuming only one wireless interface exists
+def configure_wifi(ssid, password):
+    config_lines = [
+        'ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev',
+        'update_config=1',
+        'country=US',
+        '\n',
+        'network={',
+        '\tssid="{}"'.format(ssid),
+        '\tpsk="{}"'.format(password),
+        '}'
+    ]
+    config = '\n'.join(config_lines)
 
-    iface.disconnect()  # Disconnect from any currently connected network
+    # give access and writing. may have to do this manually beforehand
+    os.popen("sudo chmod a+w /etc/wpa_supplicant/wpa_supplicant.conf")
 
-    profile = pywifi.Profile()
-    profile.ssid = ssid
-    profile.auth = const.AUTH_ALG_OPEN
-    profile.akm.append(const.AKM_TYPE_WPA2PSK)
-    profile.cipher = const.CIPHER_TYPE_CCMP
-    profile.key = password
+    # writing to file
+    with open("/etc/wpa_supplicant/wpa_supplicant.conf", "w") as wifi:
+        wifi.write(config)
 
-    iface.remove_all_network_profiles()  # Remove existing profiles
-    tmp_profile = iface.add_network_profile(profile)
-
-    iface.connect(tmp_profile)
-    time.sleep(5)  # Wait for connection to establish
-
-    if iface.status() == const.IFACE_CONNECTED:
-        print("Connected to Wi-Fi network:", ssid)
-    else:
-        print("Failed to connect to Wi-Fi network")
+    print("Wifi config added. Refreshing configs")
+    ## refresh configs
+    os.popen("sudo wpa_cli -i wlan0 reconfigure")
