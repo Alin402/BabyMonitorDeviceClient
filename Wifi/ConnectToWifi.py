@@ -23,4 +23,6 @@ def connect_to_wifi(ssid, password):
 
     print("Wifi config added. Refreshing configs")
     ## refresh configs
-    os.popen("sudo wpa_cli -i wlan0 reconfigure")
+    os.popen("sudo ip link set wlan0 down")
+
+
