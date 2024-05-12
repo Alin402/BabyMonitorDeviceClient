@@ -2,7 +2,7 @@ import os
 import subprocess
 
 
-def configure_and_connect_wifi(ssid, password):
+def connect_to_wifi(ssid, password):
     config_lines = [
         'country=US',
         'ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev',
