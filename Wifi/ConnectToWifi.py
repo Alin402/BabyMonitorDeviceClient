@@ -15,14 +15,19 @@ def connect_to_wifi(ssid, password):
         ]
         config = '\n'.join(config_lines)
 
-        # give access and writing. may have to do this manually beforehand
+        # Give access and writing permissions. May have to do this manually beforehand.
         os.popen("sudo chmod a+w /etc/wpa_supplicant/wpa_supplicant.conf")
 
-        # writing to file
+        # Write to the configuration file.
         with open("/etc/wpa_supplicant/wpa_supplicant.conf", "w") as wifi:
             wifi.write(config)
 
-        print("Wifi config added. Refreshing configs")
+        print("Wi-Fi configuration added. Refreshing Wi-Fi configurations...")
+        # Refresh Wi-Fi configurations.
         os.popen("sudo wpa_cli -i wlan0 reconfigure")
+
+        # Connect to the configured Wi-Fi network.
+        print("Connecting to Wi-Fi network:", ssid)
+        os.popen("sudo wpa_cli -i wlan0 reassociate")
     except Exception as e:
         print("Exception in connect to wifi " + str(e))
