@@ -3,6 +3,7 @@ from wifi import Cell, Scheme
 
 
 def connect_to_wifi(ssid, password):
+    print("Connecting to wifi... " + ssid + " with password " + password)
     cells = wifi.Cell.all('wlan0')
     for cell in cells:
         if cell.ssid == ssid:
