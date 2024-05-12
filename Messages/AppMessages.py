@@ -8,7 +8,6 @@ async def receive_messages(websocket, appData, event, lock):
     with lock:
         print("receiving messages...")
         while event.is_set():
-            print("enter messages data loop...")
             try:
                 message = await websocket.recv()
                 jsonMessage = json.loads(message)
@@ -17,8 +16,9 @@ async def receive_messages(websocket, appData, event, lock):
                     task = asyncio.create_task(restart_device())
                     await asyncio.gather(task)
                 elif messageType == 9:
-                    print(jsonMessage["Content"]['WifiName'])
-                    print(jsonMessage["Content"]['WifiPassword'])
+                    wifiName = jsonMessage["Content"]['WifiName']
+                    wifiPassword = jsonMessage["Content"]['WifiPassword']
+                    connect_to_wifi(wifiName, wifiPassword)
             except Exception as e:
                 print("Exception in app messages: " + str(e))
                 continue

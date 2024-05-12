@@ -18,7 +18,6 @@ async def send_system_data(websocket, appData, event, lock):
     wifiName = get_current_wifi_name()
     with lock:
         while event.is_set():
-            print("enter system data loop...")
             try:
                 with open("/sys/class/thermal/thermal_zone0/temp", "r") as file:
                     if file is None:
