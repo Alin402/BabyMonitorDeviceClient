@@ -19,7 +19,7 @@ def connect_to_wifi(ssid, password):
         os.popen("sudo chmod a+w /etc/wpa_supplicant/wpa_supplicant.conf")
 
         # writing to file
-        with open("sudo /etc/wpa_supplicant/wpa_supplicant.conf", "w") as wifi:
+        with open("/etc/wpa_supplicant/wpa_supplicant.conf", "w") as wifi:
             wifi.write(config)
 
         print("Wifi config added. Refreshing configs")
