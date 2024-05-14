@@ -31,7 +31,10 @@ def get_app_data():
     post_response = requests.post(url_post, json=body)
 
     if not post_response.json()["livestreamUrl"] and not post_response.json()["streamId"]:
-        print("No livestream channel created")
+        livepeerApiKey = config["Api_Keys"]["LIVEPEER_API_KEY"]
+        lpClient = livepeer.Livepeer(
+            api_key=livepeerApiKey
+        )
 
     return AppData(
         apiKeyId,
