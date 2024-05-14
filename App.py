@@ -56,7 +56,7 @@ async def connect_to_server():
                 receive_msgs_task = asyncio.create_task(
                     receive_messages(websocket, copy.deepcopy(appData), receive_messages_event,
                                      receive_messages_websocket_lock))
-                livestream_coroutine = asyncio.create_task(start_live_stream(send_livestream_data_event))
+                livestream_coroutine = asyncio.create_task(start_live_stream(send_livestream_data_event, copy.deepcopy(appData)))
                 system_data_coroutine = asyncio.create_task(
                     send_system_data(websocket, copy.deepcopy(appData), send_system_data_event,
                                      send_system_data_websocket_lock))
