@@ -1,19 +1,37 @@
-import subprocess
-import asyncio
+import cv2
+from deepface import DeepFace
 
 
 async def start_live_stream(event, appData):
-    try:
-        print("Starting Livestream...")
-        streamCommand = "libcamera-vid -t 0 --width 640 --height 362  --inline -o - | ffmpeg -re -ar 44100 -ac 2 -acodec pcm_s16le -f s16le -ac 2 -i /dev/zero -f h264 -i - -vcodec copy -acodec aac -ab 128k -g 50 -strict experimental -f flv rtmp://rtmp.livepeer.com/live/8da5-10go-ds2a-e2qd"
-        print(streamCommand)
-        process = await asyncio.create_subprocess_shell(
-            streamCommand,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
-        )
+    # Load face cascade classifier
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    # Start capturing video
+    cap = cv2.VideoCapture(0)
+    while True:
+        # Capture frame-by-frame
+        ret, frame = cap.read()
 
-        await process.communicate()
+        # Convert frame to grayscale
+        gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    except Exception as e:
-        print("Exception in livestream: " + str(e))
+        # Convert grayscale frame to RGB format
+        rgb_frame = cv2.cvtColor(gray_frame, cv2.COLOR_GRAY2RGB)
+
+        # Detect faces in the frame
+        faces = face_cascade.detectMultiScale(gray_frame, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+
+        for (x, y, w, h) in faces:
+            # Extract the face ROI (Region of Interest)
+            face_roi = rgb_frame[y:y + h, x:x + w]
+
+            # Perform emotion analysis on the face ROI
+            result = DeepFace.analyze(face_roi, actions=['emotion'], enforce_detection=False)
+
+            # Determine the dominant emotion
+            emotion = result[0]['dominant_emotion']
+
+            print(emotion)
+
+        # Press 'q' to exit
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
