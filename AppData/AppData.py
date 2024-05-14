@@ -1,5 +1,7 @@
 import requests
 import configparser
+import livepeer
+from livepeer.models import components
 
 
 class AppData:
