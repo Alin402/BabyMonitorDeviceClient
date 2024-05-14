@@ -31,6 +31,7 @@ def get_app_data():
 
     url_post = uri + "/api/device/get/key"
     post_response = requests.post(url_post, json=body)
+    livestreamUrl = ""
 
     if not post_response.json()["livestreamUrl"] and not post_response.json()["streamId"]:
         livepeerApiKey = config["Api_Keys"]["LIVEPEER_API_KEY"]
@@ -43,14 +44,29 @@ def get_app_data():
         res = client.stream.create(req)
         if res.stream is not None:
             streamId = res.stream.playback_id
-            livestreamUrl = res.stream.stream_key
-            print(streamId)
-            print(livestreamUrl)
+            livestreamUrl = "rtmp://rtmp.livepeer.com/live/" + res.stream.stream_key
+
+            body = {
+                "ApiKeyId": apiKeyId,
+                "ApiKeyValue": apiKeyValue,
+                "DeviceId": deviceId,
+                "StreamId": streamId,
+                "LivestreamUrl": livestreamUrl
+            }
+
+            url_post = uri + "/api/device/get/key"
+            put_response = requests.put(url_post, json=body)
+            print(put_response)
+        else:
+            return
+    else:
+        livestreamUrl = post_response.json()["livestreamUrl"]
+
 
     return AppData(
         apiKeyId,
         apiKeyValue,
         post_response.json()["id"],
         post_response.json()["userId"],
-        post_response.json()["livestreamUrl"]
+        livestreamUrl
     )
