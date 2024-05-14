@@ -29,7 +29,9 @@ def get_app_data():
 
     url_post = uri + "/api/device/get/key"
     post_response = requests.post(url_post, json=body)
-    print(apiKeyId)
+
+    if post_response.json()["livestreamUrl"] is None and post_response.json()["PlaybackUrl"] is None:
+        print("No livestream channel created")
 
     return AppData(
         apiKeyId,
