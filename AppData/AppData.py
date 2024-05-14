@@ -30,7 +30,7 @@ def get_app_data():
     url_post = uri + "/api/device/get/key"
     post_response = requests.post(url_post, json=body)
 
-    if not post_response.json()["livestreamUrl"] and not post_response.json()["StreamId"]:
+    if not post_response.json()["livestreamUrl"] and not post_response.json()["streamId"]:
         print("No livestream channel created")
 
     return AppData(
