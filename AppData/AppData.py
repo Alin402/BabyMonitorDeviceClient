@@ -35,7 +35,7 @@ def get_app_data():
     if not post_response.json()["livestreamUrl"] and not post_response.json()["streamId"]:
         livepeerApiKey = config["Api_Keys"]["LIVEPEER_API_KEY"]
         client = livepeer.Livepeer(
-            api_key = livepeerApiKey
+            api_key = "bd39e9bb-a707-4aab-9c03-25e9a2171b83"
         )
         req = components.NewStreamPayload(
             name = deviceId + "_streaming_channel",
