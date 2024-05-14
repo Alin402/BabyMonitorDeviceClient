@@ -41,7 +41,11 @@ def get_app_data():
             name = deviceId + "_streaming_channel",
         )
         res = client.stream.create(req)
-        print(res.stream)
+        if res.stream is not None:
+            streamId = res.stream.playback_id
+            livestreamUrl = res.stream.stream_key
+            print(streamId)
+            print(livestreamUrl)
 
     return AppData(
         apiKeyId,
