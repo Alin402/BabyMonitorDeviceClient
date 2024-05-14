@@ -41,7 +41,7 @@ def get_app_data():
             name = deviceId + "_streaming_channel",
         )
         res = client.stream.create(req)
-        print(res)
+        print(res.stream)
 
     return AppData(
         apiKeyId,
