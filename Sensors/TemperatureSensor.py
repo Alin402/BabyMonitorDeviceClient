@@ -28,11 +28,11 @@ async def send_temperature_sensor_data(websocket, appData, event, lock):
             print("enter temp data loop...")
             try:
                 print("sending temperature...")
-                temperatureC = dhtDevice.temperature
+                temperatureC = random.uniform(20, 30)
                 if temperatureC is None:
                     return
                 temperatureF = temperatureC * (9 / 5) + 32
-                humidity = dhtDevice.humidity
+                humidity = random.uniform(10, 20)
 
                 if not is_numeric(temperatureC) or temperatureC == 0:
                     await asyncio.sleep(1)
