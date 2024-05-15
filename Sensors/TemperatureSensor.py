@@ -14,6 +14,7 @@ def is_numeric(value):
 
 
 async def send_temperature_sensor_data(websocket, appData, event, lock):
+    global dhtDevice
     try:
         dhtDevice = adafruit_dht.DHT11(board.D23)
     except RuntimeError as e:
@@ -27,11 +28,11 @@ async def send_temperature_sensor_data(websocket, appData, event, lock):
             print("enter temp data loop...")
             try:
                 print("sending temperature...")
-                temperatureC = random.uniform(20, 30)
+                temperatureC = dhtDevice.temperature
                 if temperatureC is None:
                     return
                 temperatureF = temperatureC * (9 / 5) + 32
-                humidity = random.uniform(30, 40)
+                humidity = dhtDevice.humidity
 
                 if not is_numeric(temperatureC) or temperatureC == 0:
                     await asyncio.sleep(1)
