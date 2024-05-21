@@ -44,7 +44,7 @@ def get_app_data():
         res = client.stream.create(req)
         if res.stream is not None:
             streamId = res.stream.playback_id
-            livestreamUrl = "rtmp://rtmp.livepeer.com/live/" + res.stream.stream_key
+            livestreamUrl = "https://livepeercdn.studio/hls/" + streamId + "/index.m3u8"
 
             body = {
                 "ApiKeyId": apiKeyId,
@@ -60,7 +60,7 @@ def get_app_data():
         else:
             return
     else:
-        livestreamUrl = post_response.json()["livestreamUrl"]
+        livestreamUrl = "https://livepeercdn.studio/hls/" + post_response.json()["streamId"] + "/index.m3u8"
 
 
     return AppData(
