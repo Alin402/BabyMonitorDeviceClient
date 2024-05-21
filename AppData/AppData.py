@@ -5,12 +5,13 @@ from livepeer.models import components
 
 
 class AppData:
-    def __init__(self, apiKeyId, apiKeyValue, deviceID, userID, streamingChannelUrl):
+    def __init__(self, apiKeyId, apiKeyValue, deviceID, userID, streamingChannelUrl, playbackUrl):
         self.ApiKeyId = apiKeyId,
         self.ApiKeyValue = apiKeyValue
         self.DeviceID = deviceID
         self.UserID = userID
         self.StreamingChannelUrl = streamingChannelUrl
+        self.PlaybackUrl = playbackUrl
 
 
 def get_app_data():
@@ -32,6 +33,7 @@ def get_app_data():
     url_post = uri + "/api/device/get/key"
     post_response = requests.post(url_post, json=body)
     livestreamUrl = ""
+    playbackUrl = ""
 
     if not post_response.json()["livestreamUrl"] and not post_response.json()["streamId"]:
         livepeerApiKey = config["Api_Keys"]["LIVEPEER_API_KEY"]
@@ -44,7 +46,8 @@ def get_app_data():
         res = client.stream.create(req)
         if res.stream is not None:
             streamId = res.stream.playback_id
-            livestreamUrl = "https://livepeercdn.studio/hls/" + streamId + "/index.m3u8"
+            livestreamUrl = "rtmp://rtmp.livepeer.com/live/" + res.stream.stream_key
+            playbackUrl = "https://livepeercdn.studio/hls/" + streamId + "/index.m3u8"
 
             body = {
                 "ApiKeyId": apiKeyId,
@@ -60,13 +63,14 @@ def get_app_data():
         else:
             return
     else:
-        livestreamUrl = "https://livepeercdn.studio/hls/" + post_response.json()["streamId"] + "/index.m3u8"
-
+        livestreamUrl = post_response.json()["livestreamUrl"]
+        playbackUrl = "https://livepeercdn.studio/hls/" + post_response.json()["streamId"] + "/index.m3u8"
 
     return AppData(
         apiKeyId,
         apiKeyValue,
         post_response.json()["id"],
         post_response.json()["userId"],
-        livestreamUrl
+        livestreamUrl,
+        playbackUrl
     )

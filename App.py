@@ -40,7 +40,7 @@ async def connect_to_server():
             async with websockets.connect(uri) as websocket:
                 messageContent = ConnectToServerMessageContent(appData.ApiKeyId[0], appData.ApiKeyValue,
                                                                appData.DeviceID, appData.UserID,
-                                                               appData.StreamingChannelUrl)
+                                                               appData.PlaybackUrl)
                 message = get_connect_to_server_message(messageContent)
                 await websocket.send(json.dumps(message))
                 print("Connected to server...")
